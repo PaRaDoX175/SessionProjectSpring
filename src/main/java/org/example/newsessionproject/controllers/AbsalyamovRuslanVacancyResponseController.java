@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/vacancyResponse")
 public class AbsalyamovRuslanVacancyResponseController {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanVacancyResponseController.class);
     private final AbsalyamovRuslanVacancyResponseService vacancyResponseService;
 
     public AbsalyamovRuslanVacancyResponseController(AbsalyamovRuslanVacancyResponseService vacancyResponseService) {
@@ -26,18 +27,21 @@ public class AbsalyamovRuslanVacancyResponseController {
     @GetMapping("/vacancy/{vacancyId}")
     @PreAuthorize("hasRole('CLIENT')")
     public List<AbsalyamovRuslanVacancyResponse> getResponsesForClient(@PathVariable Long vacancyId) {
+        log.debug("API getResponsesForClient called vacancyId={}", vacancyId);
         return vacancyResponseService.getResponsesForClient(vacancyId);
     }
 
     @GetMapping("/freelancer")
     @PreAuthorize("hasRole('FREELANCER')")
     public List<AbsalyamovRuslanVacancyResponse> getResponsesForFreelancer(@AuthenticationPrincipal AbsalyamovRuslanUserDetails user) {
+        log.debug("API getResponsesForFreelancer called userId={}", user.getId());
         return vacancyResponseService.getResponsesForFreelancer(user.getId());
     }
 
     @PostMapping
     @PreAuthorize("hasRole('FREELANCER')")
     public void addResponse(@RequestBody @Valid AbsalyamovRuslanAddVacancyResponseDto dto) {
+        log.info("API addResponse called vacancyId={} freelancerId={}", dto.getVacancyId(), dto.getFreelancerId());
         vacancyResponseService.addResponse(dto);
     }
 
@@ -45,6 +49,7 @@ public class AbsalyamovRuslanVacancyResponseController {
     @PreAuthorize("hasRole('CLIENT')")
     public AbsalyamovRuslanVacancyResponse changeProposalStatus(@PathVariable Long id,
                                                                 @RequestBody @Valid AbsalyamovRuslanChangeProposalStatusDto dto) {
+        log.info("API changeProposalStatus called responseId={} status={}", id, dto.getStatus());
         return vacancyResponseService.changeProposalStatus(id, dto);
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class AbsalyamovRuslanVacancyService {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanVacancyService.class);
     private final AbsalyamovRuslanVacancyRepository vacancyRepository;
 
     public AbsalyamovRuslanVacancyService(AbsalyamovRuslanVacancyRepository vacancyRepository) {
@@ -27,6 +28,9 @@ public class AbsalyamovRuslanVacancyService {
             String sortBy,
             String dir)
     {
+        log.debug("Fetching vacancies pageIndex={} pageSize={} search='{}' sortBy={} dir={}",
+                pageIndex, pageSize, search, sortBy, dir);
+
         var sort = dir.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -45,6 +49,7 @@ public class AbsalyamovRuslanVacancyService {
             vacDtos.add(dto);
         }
 
+        log.info("Vacancies fetched successfully. pageIndex={} resultCount={}", pageIndex, vacDtos.size());
         return vacDtos;
     }
 }

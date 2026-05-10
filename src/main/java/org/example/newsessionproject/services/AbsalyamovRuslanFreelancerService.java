@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AbsalyamovRuslanFreelancerService {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanFreelancerService.class);
     private final AbsalyamovRuslanFreelancerRepository freelancerRepository;
 
     public AbsalyamovRuslanFreelancerService(AbsalyamovRuslanFreelancerRepository freelancerRepository) {
@@ -18,24 +19,34 @@ public class AbsalyamovRuslanFreelancerService {
     }
 
     public AbsalyamovRuslanFreelancerResponseDto getFreelancer(Long userId) {
+        log.debug("Loading freelancer profile for userId={}", userId);
         var profile = freelancerRepository.findByUserId(userId)
-                .orElseThrow(() -> new AbsalyamovRuslanNotFoundException("Freelancer profile with this id is not found!"));
+                .orElseThrow(() -> {
+                    log.warn("Freelancer profile not found for userId={}", userId);
+                    return new AbsalyamovRuslanNotFoundException("Freelancer profile with this id is not found!");
+                });
 
         var freelancerRespDto = new AbsalyamovRuslanFreelancerResponseDto();
         freelancerRespDto.setName(profile.getName());
         freelancerRespDto.setSurname(profile.getSurname());
         freelancerRespDto.setResume(profile.getResume());
 
+        log.info("Freelancer profile loaded for userId={}", userId);
         return freelancerRespDto;
     }
 
     public AbsalyamovRuslanFreelancerResponseDto addResume(Long userId, AbsalyamovRuslanAddResumeDto dto) {
+        log.info("Adding resume for freelancer userId={} experience={} salary={}",
+                userId, dto.getExperience(), dto.getSalary());
         var resume = new AbsalyamovRuslanResume();
         resume.setExperience(dto.getExperience());
         resume.setSalary(dto.getSalary());
 
         var profile = freelancerRepository.findByUserId(userId)
-                .orElseThrow(() -> new AbsalyamovRuslanNotFoundException("Freelancer profile with this id is not found!"));
+                .orElseThrow(() -> {
+                    log.warn("Freelancer profile not found for userId={}", userId);
+                    return new AbsalyamovRuslanNotFoundException("Freelancer profile with this id is not found!");
+                });
 
         resume.setFreelancerProfile(profile);
         profile.setResume(resume);
@@ -47,6 +58,7 @@ public class AbsalyamovRuslanFreelancerService {
         freelancerRespDto.setSurname(profile.getSurname());
         freelancerRespDto.setResume(profile.getResume());
 
+        log.info("Resume added for freelancer userId={}", userId);
         return freelancerRespDto;
     }
 }

@@ -10,6 +10,8 @@ import org.example.newsessionproject.exceptions.AbsalyamovRuslanUserAlreadyExist
 import org.example.newsessionproject.repositories.AbsalyamovRuslanClientRepository;
 import org.example.newsessionproject.repositories.AbsalyamovRuslanFreelancerRepository;
 import org.example.newsessionproject.repositories.AbsalyamovRuslanUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AbsalyamovRuslanAuthService {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanAuthService.class);
     private final AbsalyamovRuslanUserRepository userRepository;
     private final AbsalyamovRuslanJwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -42,8 +45,10 @@ public class AbsalyamovRuslanAuthService {
 
     @Transactional
     public AbsalyamovRuslanJWT register(AbsalyamovRuslanFreelancerRegister register) {
+        log.info("Freelancer registration started");
 
         if (userRepository.existsByEmail(register.getEmail())) {
+            log.warn("Freelancer registration rejected because email already exists");
             throw new AbsalyamovRuslanUserAlreadyExistException("User with this email is already exist!");
         }
 
@@ -56,14 +61,17 @@ public class AbsalyamovRuslanAuthService {
         userRepository.save(user);
 
         freelancerRepository.save(freelancer);
+        log.info("Freelancer registration completed for userId={}", user.getId());
 
         return new AbsalyamovRuslanJWT(jwtService.generateToken(user));
     }
 
     @Transactional
     public AbsalyamovRuslanJWT register(AbsalyamovRuslanClientRegister register) {
+        log.info("Client registration started");
 
         if (userRepository.existsByEmail(register.getEmail())) {
+            log.warn("Client registration rejected because email already exists");
             throw new AbsalyamovRuslanUserAlreadyExistException("User with this email is already exist!");
         }
 
@@ -74,16 +82,22 @@ public class AbsalyamovRuslanAuthService {
 
         userRepository.save(user);
         clientRepository.save(client);
+        log.info("Client registration completed for userId={}", user.getId());
 
         return new AbsalyamovRuslanJWT(jwtService.generateToken(user));
     }
 
     public AbsalyamovRuslanJWT login(AbsalyamovRuslanLogin login) {
+        log.info("Login started");
 
         var user = userRepository.findByEmail(login.getEmail())
-                .orElseThrow(() -> new AbsalyamovRuslanNotFoundException("User with this email is not found!"));
+                .orElseThrow(() -> {
+                    log.warn("Login failed because user not found");
+                    return new AbsalyamovRuslanNotFoundException("User with this email is not found!");
+                });
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+        log.info("Login succeeded for userId={}", user.getId());
 
         return new AbsalyamovRuslanJWT(jwtService.generateToken(user));
     }

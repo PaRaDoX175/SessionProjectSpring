@@ -2,6 +2,8 @@ package org.example.newsessionproject.services;
 
 import org.example.newsessionproject.exceptions.AbsalyamovRuslanNotFoundException;
 import org.example.newsessionproject.repositories.AbsalyamovRuslanUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 public class AbsalyamovRuslanUserDetailsService implements UserDetailsService {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanUserDetailsService.class);
 
     private final AbsalyamovRuslanUserRepository userRepository;
 
@@ -22,9 +25,14 @@ public class AbsalyamovRuslanUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.debug("Loading user details");
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AbsalyamovRuslanNotFoundException("User with this email is not found!"));
+                .orElseThrow(() -> {
+                    log.warn("User details not found");
+                    return new AbsalyamovRuslanNotFoundException("User with this email is not found!");
+                });
 
+        log.debug("User details loaded for role={}", user.getRole());
         return new User(user.getEmail(), user.getPassword(),
                 List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }

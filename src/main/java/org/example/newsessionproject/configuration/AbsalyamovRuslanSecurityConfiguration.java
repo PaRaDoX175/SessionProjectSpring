@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class AbsalyamovRuslanSecurityConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanSecurityConfiguration.class);
     private final AbsalyamovRuslanJwtAuthFilter jwtAuthFilter;
 
     public AbsalyamovRuslanSecurityConfiguration(AbsalyamovRuslanJwtAuthFilter jwtAuthFilter) {
@@ -26,6 +27,7 @@ public class AbsalyamovRuslanSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        log.info("Configuring Spring Security filter chain");
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(s ->
                         s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
