@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface AbsalyamovRuslanChatRepository extends MongoRepository<AbsalyamovRuslanChat, Long> {
+public interface AbsalyamovRuslanChatRepository extends MongoRepository<AbsalyamovRuslanChat, String> {
     List<AbsalyamovRuslanChat> findByClientIdOrFreelancerId(Long clientId, Long freelancerId);
 }

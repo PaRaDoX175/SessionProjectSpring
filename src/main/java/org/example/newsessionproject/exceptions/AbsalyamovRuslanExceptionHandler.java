@@ -18,4 +18,9 @@ public class AbsalyamovRuslanExceptionHandler {
     public ResponseEntity<?> handleUserAlreadyExistEx(AbsalyamovRuslanUserAlreadyExistException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ex", ex.getMessage()));
     }
+
+    @ExceptionHandler(AbsalyamovRuslanAccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedEx(AbsalyamovRuslanAccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("ex", ex.getMessage()));
+    }
 }
