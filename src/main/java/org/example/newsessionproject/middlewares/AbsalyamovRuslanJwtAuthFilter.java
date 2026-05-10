@@ -9,12 +9,13 @@ import org.example.newsessionproject.services.AbsalyamovRuslanJwtService;
 import org.example.newsessionproject.services.AbsalyamovRuslanUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Service
+@Component
 public class AbsalyamovRuslanJwtAuthFilter extends OncePerRequestFilter {
     private final AbsalyamovRuslanUserDetailsService userDetailsService;
     private final AbsalyamovRuslanJwtService jwtService;

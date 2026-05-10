@@ -13,4 +13,9 @@ public class AbsalyamovRuslanExceptionHandler {
     public ResponseEntity<?> handleNotFoundEx(AbsalyamovRuslanNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ex", ex.getMessage()));
     }
+
+    @ExceptionHandler(AbsalyamovRuslanUserAlreadyExistException.class)
+    public ResponseEntity<?> handleUserAlreadyExistEx(AbsalyamovRuslanUserAlreadyExistException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ex", ex.getMessage()));
+    }
 }
