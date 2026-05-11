@@ -9,6 +9,7 @@ import org.example.newsessionproject.dtos.AbsalyamovRuslanAddVacancyDto;
 import org.example.newsessionproject.dtos.AbsalyamovRuslanClientResponseDto;
 import org.example.newsessionproject.dtos.AbsalyamovRuslanUserDetails;
 import org.example.newsessionproject.services.AbsalyamovRuslanClientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,18 @@ public class AbsalyamovRuslanClientController {
     public AbsalyamovRuslanClientResponseDto addVacancy(@RequestBody @Valid AbsalyamovRuslanAddVacancyDto dto,
                                         @AuthenticationPrincipal AbsalyamovRuslanUserDetails user) {
         return clientService.addVacancy(user.getId(), dto);
+    }
+
+    @Operation(summary = "Delete vacancy", description = "Delete vacancy from client")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Successfully deleted"),
+            @ApiResponse(responseCode = "403", description = "Access for deletion is denied")
+    })
+    @DeleteMapping("/{vacId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteVacancy(@PathVariable Long vacId,
+                              @AuthenticationPrincipal AbsalyamovRuslanUserDetails userDetails) {
+        clientService.deleteVacancy(userDetails.getId(), vacId);
     }
 }

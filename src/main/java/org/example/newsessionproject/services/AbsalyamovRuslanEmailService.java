@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class EmailService {
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+public class AbsalyamovRuslanEmailService {
+    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanEmailService.class);
     private final JavaMailSender jms;
 
-    public EmailService(JavaMailSender jms) {
+    public AbsalyamovRuslanEmailService(JavaMailSender jms) {
         this.jms = jms;
     }
 

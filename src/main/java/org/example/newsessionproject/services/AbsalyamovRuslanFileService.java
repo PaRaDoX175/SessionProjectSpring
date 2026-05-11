@@ -34,7 +34,7 @@ public class AbsalyamovRuslanFileService {
 
     private final AbsalyamovRuslanFileRepository fileRepository;
     private final AbsalyamovRuslanFreelancerRepository freelancerRepository;
-    private final EmailService emailService;
+    private final AbsalyamovRuslanEmailService emailService;
     private final AbsalyamovRuslanFileMapper fileMapper;
 
     @Value("${app.upload.dir:./uploads}")
@@ -42,7 +42,7 @@ public class AbsalyamovRuslanFileService {
 
     public AbsalyamovRuslanFileService(AbsalyamovRuslanFileRepository fileRepository,
                                        AbsalyamovRuslanFreelancerRepository freelancerRepository,
-                                       EmailService emailService,
+                                       AbsalyamovRuslanEmailService emailService,
                                        AbsalyamovRuslanFileMapper fileMapper) {
         this.fileRepository = fileRepository;
         this.freelancerRepository = freelancerRepository;

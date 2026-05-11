@@ -24,14 +24,14 @@ public class AbsalyamovRuslanVacancyResponseService {
     private final AbsalyamovRuslanFreelancerRepository freelancerRepository;
     private final AbsalyamovRuslanVacancyResponseRepository vacancyResponseRepository;
     private final AbsalyamovRuslanChatService chatService;
-    private final EmailService emailService;
+    private final AbsalyamovRuslanEmailService emailService;
     private final AbsalyamovRuslanUserRepository userRepository;
 
     public AbsalyamovRuslanVacancyResponseService(AbsalyamovRuslanVacancyRepository vacancyRepository,
                                   AbsalyamovRuslanFreelancerRepository freelancerRepository,
                                   AbsalyamovRuslanVacancyResponseRepository vacancyResponseRepository,
                                   AbsalyamovRuslanChatService chatService,
-                                  EmailService emailService,
+                                  AbsalyamovRuslanEmailService emailService,
                                   AbsalyamovRuslanUserRepository userRepository) {
         this.vacancyRepository = vacancyRepository;
         this.freelancerRepository = freelancerRepository;
