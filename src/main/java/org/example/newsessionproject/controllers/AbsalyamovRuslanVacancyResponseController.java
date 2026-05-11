@@ -74,11 +74,12 @@ public class AbsalyamovRuslanVacancyResponseController {
             @ApiResponse(responseCode = "403", description = "Access denied. FREELANCER role required", content = @Content),
             @ApiResponse(responseCode = "404", description = "Vacancy or freelancer not found", content = @Content)
     })
-    @PostMapping
+    @PostMapping("/{vacId}")
     @PreAuthorize("hasRole('FREELANCER')")
-    public void addResponse(@RequestBody @Valid AbsalyamovRuslanAddVacancyResponseDto dto) {
-        log.info("API addResponse called vacancyId={} freelancerId={}", dto.getVacancyId(), dto.getFreelancerId());
-        vacancyResponseService.addResponse(dto);
+    public void addResponse(@PathVariable Long vacId,
+                            @AuthenticationPrincipal AbsalyamovRuslanUserDetails userDetails) {
+        log.info("API addResponse called vacancyId={} userId={}", vacId, userDetails.getId());
+        vacancyResponseService.addResponse(vacId, userDetails.getId());
     }
 
     @Operation(

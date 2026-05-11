@@ -72,17 +72,17 @@ public class AbsalyamovRuslanVacancyResponseService {
     }
 
 
-    public void addResponse(AbsalyamovRuslanAddVacancyResponseDto dto) {
-        log.info("Adding vacancy response vacancyId={} freelancerId={}", dto.getVacancyId(), dto.getFreelancerId());
-        var vacancy = vacancyRepository.findById(dto.getVacancyId())
+    public void addResponse(Long vacancyId, Long userId) {
+        log.info("Adding vacancy response vacancyId={} userId={}", vacancyId, userId);
+        var vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> {
-                    log.warn("Vacancy not found vacancyId={}", dto.getVacancyId());
+                    log.warn("Vacancy not found vacancyId={}", vacancyId);
                     return new AbsalyamovRuslanNotFoundException("Vacancy with this id is not found!");
                 });
 
-        var freelancer = freelancerRepository.findById(dto.getFreelancerId())
+        var freelancer = freelancerRepository.findByUserId(userId)
                 .orElseThrow(() -> {
-                    log.warn("Freelancer not found freelancerId={}", dto.getFreelancerId());
+                    log.warn("Freelancer not found userId={}", userId);
                     return new AbsalyamovRuslanNotFoundException("Freelancer with this id is not found!");
                 });
 

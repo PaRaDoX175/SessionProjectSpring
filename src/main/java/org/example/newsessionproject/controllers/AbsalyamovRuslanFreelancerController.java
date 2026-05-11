@@ -10,6 +10,7 @@ import org.example.newsessionproject.dtos.AbsalyamovRuslanAddResumeDto;
 import org.example.newsessionproject.dtos.AbsalyamovRuslanFreelancerResponseDto;
 import org.example.newsessionproject.dtos.AbsalyamovRuslanUserDetails;
 import org.example.newsessionproject.services.AbsalyamovRuslanFreelancerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class AbsalyamovRuslanFreelancerController {
 
     @Operation(
             summary = "Add or update resume",
-            description = "Adds or updates the resume of the authenticated freelancer. Accessible only to users with FREELANCER role."
+            description = "Adds or updates the resume of the authenticated freelancer."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Resume updated successfully"),
@@ -53,5 +54,22 @@ public class AbsalyamovRuslanFreelancerController {
     public AbsalyamovRuslanFreelancerResponseDto addResume(@RequestBody @Valid AbsalyamovRuslanAddResumeDto dto,
                                            @AuthenticationPrincipal AbsalyamovRuslanUserDetails user) {
         return freelancerService.addResume(user.getId(), dto);
+    }
+
+    @Operation(
+            summary = "Delete resume",
+            description = "Delete the resume of the authenticated freelancer."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Resume successfully deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Resume not found", content = @Content)
+    })
+    @DeleteMapping("/{resumeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteResume(@PathVariable Long resumeId,
+                             @AuthenticationPrincipal AbsalyamovRuslanUserDetails userDetails) {
+        freelancerService.deleteResume(userDetails.getId(), resumeId);
     }
 }
