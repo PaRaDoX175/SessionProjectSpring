@@ -20,8 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/files")
 public class AbsalyamovRuslanFileController {
-    private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanFileController.class);
-
     private final AbsalyamovRuslanFileService fileService;
 
     public AbsalyamovRuslanFileController(AbsalyamovRuslanFileService fileService) {
