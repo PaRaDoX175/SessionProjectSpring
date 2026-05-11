@@ -3,6 +3,7 @@ package org.example.newsessionproject.services;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.example.newsessionproject.entities.AbsalyamovRuslanFreelancer;
 import org.example.newsessionproject.entities.AbsalyamovRuslanUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class AbsalyamovRuslanJwtService {
         return Jwts.builder()
                 .subject(user.getEmail())
                 .claim("id", user.getId())
+                .claim("role", user.getRole().name())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSignInKey())
