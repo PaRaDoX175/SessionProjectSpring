@@ -15,20 +15,26 @@ public class AbsalyamovRuslanExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanExceptionHandler.class);
 
     @ExceptionHandler(AbsalyamovRuslanNotFoundException.class)
-    public ResponseEntity<?> handleNotFoundEx(AbsalyamovRuslanNotFoundException ex, HttpServletRequest request) {
-        log.warn("Not found error on path={} message={}", request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<?> handleNotFoundEx(AbsalyamovRuslanNotFoundException ex) {
+        log.warn("Not found error with message={}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ex", ex.getMessage()));
     }
 
     @ExceptionHandler(AbsalyamovRuslanUserAlreadyExistException.class)
-    public ResponseEntity<?> handleUserAlreadyExistEx(AbsalyamovRuslanUserAlreadyExistException ex, HttpServletRequest request) {
-        log.warn("User already exists on path={} message={}", request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<?> handleUserAlreadyExistEx(AbsalyamovRuslanUserAlreadyExistException ex) {
+        log.warn("User already exists with message={}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ex", ex.getMessage()));
     }
 
     @ExceptionHandler(AbsalyamovRuslanAccessDeniedException.class)
-    public ResponseEntity<?> handleAccessDeniedEx(AbsalyamovRuslanAccessDeniedException ex, HttpServletRequest request) {
-        log.warn("Access denied on path={} message={}", request.getRequestURI(), ex.getMessage());
+    public ResponseEntity<?> handleAccessDeniedEx(AbsalyamovRuslanAccessDeniedException ex) {
+        log.warn("Access denied with message={}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("ex", ex.getMessage()));
+    }
+
+    @ExceptionHandler(AbsalyamovRuslanFileTypeException.class)
+    public ResponseEntity<?> handleFileTypeEx(AbsalyamovRuslanFileTypeException ex) {
+        log.warn("File type ex with message={}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ex", ex.getMessage()));
     }
 }
