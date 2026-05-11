@@ -2,6 +2,7 @@ package org.example.newsessionproject.services;
 
 import org.example.newsessionproject.dtos.AbsalyamovRuslanVacancyResponseDto;
 import org.example.newsessionproject.enums.AbsalyamovRuslanVacancyCategory;
+import org.example.newsessionproject.mappers.AbsalyamovRuslanVacancyMapper;
 import org.example.newsessionproject.repositories.AbsalyamovRuslanVacancyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,12 @@ import java.util.List;
 public class AbsalyamovRuslanVacancyService {
     private static final Logger log = LoggerFactory.getLogger(AbsalyamovRuslanVacancyService.class);
     private final AbsalyamovRuslanVacancyRepository vacancyRepository;
+    private final AbsalyamovRuslanVacancyMapper vacancyMapper;
 
-    public AbsalyamovRuslanVacancyService(AbsalyamovRuslanVacancyRepository vacancyRepository) {
+    public AbsalyamovRuslanVacancyService(AbsalyamovRuslanVacancyRepository vacancyRepository,
+                                          AbsalyamovRuslanVacancyMapper vacancyMapper) {
         this.vacancyRepository = vacancyRepository;
+        this.vacancyMapper = vacancyMapper;
     }
 
     public List<AbsalyamovRuslanVacancyResponseDto> getVacancies(
@@ -39,17 +43,8 @@ public class AbsalyamovRuslanVacancyService {
 
         var vacancies = vacancyRepository.findByPositionContainingIgnoreCase(search, page).getContent();
 
-        var vacDtos = new ArrayList<AbsalyamovRuslanVacancyResponseDto>();
-        for (var v : vacancies) {
-            var dto = new AbsalyamovRuslanVacancyResponseDto();
-            dto.setPosition(v.getPosition());
-            dto.setAddress(v.getPosition());
-            dto.setVacancyCategory(v.getVacancyCategory());
+        log.info("Vacancies fetched successfully. pageIndex={} resultCount={}", pageIndex, vacancies.size());
 
-            vacDtos.add(dto);
-        }
-
-        log.info("Vacancies fetched successfully. pageIndex={} resultCount={}", pageIndex, vacDtos.size());
-        return vacDtos;
+        return vacancies.stream().map(vacancyMapper::toResponseDto).toList();
     }
 }
